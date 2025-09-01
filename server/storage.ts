@@ -47,6 +47,7 @@ export interface IStorage {
   // Quiz attempts
   createQuizAttempt(userId: string, attempt: InsertQuizAttempt): Promise<QuizAttempt>;
   getUserQuizAttempts(userId: string): Promise<QuizAttempt[]>;
+  getQuizzesBySubject(subjectId: string): Promise<Quiz[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -271,7 +272,6 @@ export class MemStorage implements IStorage {
   }
 
   private seedLessons() {
-    // Sample lessons for different subjects and classes
     const lessons: Lesson[] = [
       // Class 1-2 Math Lessons
       {
@@ -285,13 +285,71 @@ export class MemStorage implements IStorage {
             {
               type: "explanation",
               title: "What is Counting?",
-              content: "Counting helps us know how many things we have."
+              content: "Counting helps us know how many things we have. Let's count together: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10!"
+            },
+            {
+              type: "interactive",
+              title: "Count the Objects",
+              content: "How many apples do you see? 🍎🍎🍎",
+              problem: "Count: 🍎🍎🍎",
+              answer: "3"
             }
           ]
         },
         order: 1,
         points: 5,
       },
+      {
+        id: "lesson-math-class-1-2-2",
+        subjectId: "math-class-1-2",
+        title: "Simple Addition",
+        description: "Learn to add small numbers",
+        content: {
+          type: "interactive",
+          sections: [
+            {
+              type: "explanation",
+              title: "Adding Numbers",
+              content: "When we add, we put numbers together. 2 + 1 = 3. Let's practice!"
+            },
+            {
+              type: "interactive",
+              title: "Try Adding",
+              problem: "1 + 2 = ?",
+              answer: "3"
+            }
+          ]
+        },
+        order: 2,
+        points: 5,
+      },
+
+      // Class 1-2 English Lessons
+      {
+        id: "lesson-english-class-1-2-1",
+        subjectId: "english-class-1-2",
+        title: "Learning the Alphabet",
+        description: "Learn letters A to Z",
+        content: {
+          type: "interactive",
+          sections: [
+            {
+              type: "explanation",
+              title: "The Alphabet",
+              content: "The alphabet has 26 letters. A, B, C, D, E... Let's learn them all!"
+            },
+            {
+              type: "interactive",
+              title: "What comes after B?",
+              problem: "A, B, ?",
+              answer: "C"
+            }
+          ]
+        },
+        order: 1,
+        points: 5,
+      },
+
       // Class 3-5 Math Lessons
       {
         id: "lesson-math-class-3-5-1",
@@ -304,13 +362,96 @@ export class MemStorage implements IStorage {
             {
               type: "explanation",
               title: "What is Multiplication?",
-              content: "Multiplication is repeated addition. 3 × 4 means adding 3 four times."
+              content: "Multiplication is repeated addition. 3 × 4 means adding 3 four times: 3 + 3 + 3 + 3 = 12"
+            },
+            {
+              type: "interactive",
+              title: "Solve This",
+              problem: "2 × 3 = ?",
+              answer: "6"
             }
           ]
         },
         order: 1,
         points: 10,
       },
+      {
+        id: "lesson-math-class-3-5-2",
+        subjectId: "math-class-3-5",
+        title: "Division Basics",
+        description: "Learn to divide numbers",
+        content: {
+          type: "interactive",
+          sections: [
+            {
+              type: "explanation",
+              title: "What is Division?",
+              content: "Division is sharing equally. If we have 8 apples and 4 friends, each friend gets 2 apples."
+            },
+            {
+              type: "interactive",
+              title: "Try Division",
+              problem: "8 ÷ 2 = ?",
+              answer: "4"
+            }
+          ]
+        },
+        order: 2,
+        points: 10,
+      },
+
+      // Class 3-5 Science Lessons
+      {
+        id: "lesson-science-class-3-5-1",
+        subjectId: "science-class-3-5",
+        title: "Plants and Animals",
+        description: "Learn about living things",
+        content: {
+          type: "interactive",
+          sections: [
+            {
+              type: "explanation",
+              title: "Living Things",
+              content: "Plants and animals are living things. They grow, need food, and can move or respond to their environment."
+            },
+            {
+              type: "interactive",
+              title: "Which is Living?",
+              problem: "Is a tree living?",
+              answer: "Yes"
+            }
+          ]
+        },
+        order: 1,
+        points: 10,
+      },
+
+      // Class 6-8 Math Lessons
+      {
+        id: "lesson-math-class-6-8-1",
+        subjectId: "math-class-6-8",
+        title: "Introduction to Algebra",
+        description: "Learn about variables and equations",
+        content: {
+          type: "interactive",
+          sections: [
+            {
+              type: "explanation",
+              title: "What is Algebra?",
+              content: "Algebra uses letters (like x, y) to represent unknown numbers. If x + 3 = 7, then x = 4."
+            },
+            {
+              type: "interactive",
+              title: "Solve for x",
+              problem: "x + 5 = 8, x = ?",
+              answer: "3"
+            }
+          ]
+        },
+        order: 1,
+        points: 15,
+      },
+
       // Class 6-8 Science Lessons
       {
         id: "lesson-science-class-6-8-1",
@@ -323,12 +464,70 @@ export class MemStorage implements IStorage {
             {
               type: "explanation",
               title: "What is Light?",
-              content: "Light is a form of energy that helps us see things around us."
+              content: "Light is a form of energy that helps us see. It travels in straight lines and can be reflected by mirrors."
+            },
+            {
+              type: "interactive",
+              title: "Light Properties",
+              problem: "Light travels in which lines?",
+              answer: "Straight"
             }
           ]
         },
         order: 1,
         points: 15,
+      },
+
+      // Class 9-10 Physics Lessons
+      {
+        id: "lesson-physics-class-9-10-1",
+        subjectId: "physics-class-9-10",
+        title: "Motion and Speed",
+        description: "Understanding motion, velocity and acceleration",
+        content: {
+          type: "interactive",
+          sections: [
+            {
+              type: "explanation",
+              title: "Motion",
+              content: "Motion is the change in position of an object with time. Speed = Distance/Time. Velocity includes direction."
+            },
+            {
+              type: "interactive",
+              title: "Calculate Speed",
+              problem: "If a car travels 100 km in 2 hours, what is its speed?",
+              answer: "50 km/h"
+            }
+          ]
+        },
+        order: 1,
+        points: 20,
+      },
+
+      // Class 9-10 Chemistry Lessons
+      {
+        id: "lesson-chemistry-class-9-10-1",
+        subjectId: "chemistry-class-9-10",
+        title: "Atoms and Molecules",
+        description: "Learn about the building blocks of matter",
+        content: {
+          type: "interactive",
+          sections: [
+            {
+              type: "explanation",
+              title: "Atoms",
+              content: "Atoms are the smallest particles of matter. They combine to form molecules. Water (H2O) has 2 hydrogen and 1 oxygen atom."
+            },
+            {
+              type: "interactive",
+              title: "Water Molecule",
+              problem: "How many hydrogen atoms are in H2O?",
+              answer: "2"
+            }
+          ]
+        },
+        order: 1,
+        points: 20,
       }
     ];
 
@@ -337,8 +536,65 @@ export class MemStorage implements IStorage {
   }
 
   private seedQuizzes() {
-    // Sample quizzes
     const quizzes: Quiz[] = [
+      // Class 1-2 Math Quiz
+      {
+        id: "quiz-math-class-1-2-1",
+        subjectId: "math-class-1-2",
+        lessonId: "lesson-math-class-1-2-1",
+        title: "Counting Quiz",
+        questions: [
+          {
+            id: 1,
+            question: "How many fingers do you have on one hand?",
+            options: ["3", "4", "5", "6"],
+            correctAnswer: 2,
+            points: 5
+          },
+          {
+            id: 2,
+            question: "Count the stars: ⭐⭐⭐⭐",
+            options: ["3", "4", "5", "2"],
+            correctAnswer: 1,
+            points: 5
+          },
+          {
+            id: 3,
+            question: "What comes after 7?",
+            options: ["6", "8", "9", "10"],
+            correctAnswer: 1,
+            points: 5
+          }
+        ],
+        timeLimit: 180,
+        points: 15,
+      },
+      {
+        id: "quiz-math-class-1-2-2",
+        subjectId: "math-class-1-2",
+        lessonId: "lesson-math-class-1-2-2",
+        title: "Addition Quiz",
+        questions: [
+          {
+            id: 1,
+            question: "What is 2 + 3?",
+            options: ["4", "5", "6", "7"],
+            correctAnswer: 1,
+            points: 5
+          },
+          {
+            id: 2,
+            question: "What is 1 + 4?",
+            options: ["4", "5", "6", "3"],
+            correctAnswer: 1,
+            points: 5
+          }
+        ],
+        timeLimit: 180,
+        points: 10,
+      },
+
+      // Class 3-5 Math Quizzes
       {
         id: "quiz-math-class-3-5-1",
         subjectId: "math-class-3-5",
@@ -358,10 +614,185 @@ export class MemStorage implements IStorage {
             options: ["25", "30", "35", "40"],
             correctAnswer: 1,
             points: 10
+          },
+          {
+            id: 3,
+            question: "What is 7 × 8?",
+            options: ["54", "56", "58", "60"],
+            correctAnswer: 1,
+            points: 10
           }
         ],
         timeLimit: 300,
-        points: 50,
+        points: 30,
+      },
+      {
+        id: "quiz-math-class-3-5-2",
+        subjectId: "math-class-3-5",
+        lessonId: "lesson-math-class-3-5-2",
+        title: "Division Quiz",
+        questions: [
+          {
+            id: 1,
+            question: "What is 12 ÷ 3?",
+            options: ["3", "4", "5", "6"],
+            correctAnswer: 1,
+            points: 10
+          },
+          {
+            id: 2,
+            question: "What is 20 ÷ 4?",
+            options: ["4", "5", "6", "7"],
+            correctAnswer: 1,
+            points: 10
+          }
+        ],
+        timeLimit: 240,
+        points: 20,
+      },
+
+      // Class 3-5 Science Quiz
+      {
+        id: "quiz-science-class-3-5-1",
+        subjectId: "science-class-3-5",
+        lessonId: "lesson-science-class-3-5-1",
+        title: "Living Things Quiz",
+        questions: [
+          {
+            id: 1,
+            question: "Which of these is a living thing?",
+            options: ["Rock", "Tree", "Chair", "Book"],
+            correctAnswer: 1,
+            points: 10
+          },
+          {
+            id: 2,
+            question: "What do plants need to grow?",
+            options: ["Only water", "Only sunlight", "Water and sunlight", "Nothing"],
+            correctAnswer: 2,
+            points: 10
+          }
+        ],
+        timeLimit: 240,
+        points: 20,
+      },
+
+      // Class 6-8 Math Quiz
+      {
+        id: "quiz-math-class-6-8-1",
+        subjectId: "math-class-6-8",
+        lessonId: "lesson-math-class-6-8-1",
+        title: "Algebra Basics Quiz",
+        questions: [
+          {
+            id: 1,
+            question: "If x + 3 = 10, what is x?",
+            options: ["6", "7", "8", "9"],
+            correctAnswer: 1,
+            points: 15
+          },
+          {
+            id: 2,
+            question: "If 2y = 14, what is y?",
+            options: ["6", "7", "8", "12"],
+            correctAnswer: 1,
+            points: 15
+          },
+          {
+            id: 3,
+            question: "Simplify: 3x + 2x",
+            options: ["5x", "6x", "x", "5x²"],
+            correctAnswer: 0,
+            points: 15
+          }
+        ],
+        timeLimit: 360,
+        points: 45,
+      },
+
+      // Class 6-8 Science Quiz
+      {
+        id: "quiz-science-class-6-8-1",
+        subjectId: "science-class-6-8",
+        lessonId: "lesson-science-class-6-8-1",
+        title: "Light Quiz",
+        questions: [
+          {
+            id: 1,
+            question: "Light travels in which type of lines?",
+            options: ["Curved", "Straight", "Zigzag", "Circular"],
+            correctAnswer: 1,
+            points: 15
+          },
+          {
+            id: 2,
+            question: "What happens when light hits a mirror?",
+            options: ["It disappears", "It reflects", "It bends", "It stops"],
+            correctAnswer: 1,
+            points: 15
+          }
+        ],
+        timeLimit: 300,
+        points: 30,
+      },
+
+      // Class 9-10 Physics Quiz
+      {
+        id: "quiz-physics-class-9-10-1",
+        subjectId: "physics-class-9-10",
+        lessonId: "lesson-physics-class-9-10-1",
+        title: "Motion and Speed Quiz",
+        questions: [
+          {
+            id: 1,
+            question: "A car travels 120 km in 3 hours. What is its speed?",
+            options: ["30 km/h", "40 km/h", "50 km/h", "60 km/h"],
+            correctAnswer: 1,
+            points: 20
+          },
+          {
+            id: 2,
+            question: "What is the formula for speed?",
+            options: ["Distance × Time", "Distance ÷ Time", "Time ÷ Distance", "Distance + Time"],
+            correctAnswer: 1,
+            points: 20
+          },
+          {
+            id: 3,
+            question: "Which quantity includes direction?",
+            options: ["Speed", "Distance", "Velocity", "Time"],
+            correctAnswer: 2,
+            points: 20
+          }
+        ],
+        timeLimit: 480,
+        points: 60,
+      },
+
+      // Class 9-10 Chemistry Quiz
+      {
+        id: "quiz-chemistry-class-9-10-1",
+        subjectId: "chemistry-class-9-10",
+        lessonId: "lesson-chemistry-class-9-10-1",
+        title: "Atoms and Molecules Quiz",
+        questions: [
+          {
+            id: 1,
+            question: "How many hydrogen atoms are in H2O?",
+            options: ["1", "2", "3", "4"],
+            correctAnswer: 1,
+            points: 20
+          },
+          {
+            id: 2,
+            question: "What is the smallest particle of matter?",
+            options: ["Molecule", "Atom", "Compound", "Element"],
+            correctAnswer: 1,
+            points: 20
+          }
+        ],
+        timeLimit: 360,
+        points: 40,
       }
     ];
 
@@ -447,6 +878,10 @@ export class MemStorage implements IStorage {
     );
   }
 
+  async getQuizzesBySubject(subjectId: string): Promise<Quiz[]> {
+    return Array.from(this.quizzes.values()).filter(quiz => quiz.subjectId === subjectId);
+  }
+
   async getSubject(id: string): Promise<Subject | undefined> {
     return this.subjects.get(id);
   }
@@ -459,10 +894,6 @@ export class MemStorage implements IStorage {
 
   async getLesson(id: string): Promise<Lesson | undefined> {
     return this.lessons.get(id);
-  }
-
-  async getQuizzesBySubject(subjectId: string): Promise<Quiz[]> {
-    return Array.from(this.quizzes.values()).filter(quiz => quiz.subjectId === subjectId);
   }
 
   async getQuiz(id: string): Promise<Quiz | undefined> {

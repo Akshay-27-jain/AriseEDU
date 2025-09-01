@@ -8,6 +8,7 @@ import ProfileSetupPage from "@/pages/profile-setup";
 import DashboardPage from "@/pages/dashboard";
 import LessonDetailPage from "@/pages/lesson-detail";
 import QuizPage from "@/pages/quiz";
+import QuizSelectionPage from "@/pages/quiz-selection";
 import ProfilePage from "@/pages/profile";
 import NotFound from "@/pages/not-found";
 import { AuthProvider } from "@/hooks/use-auth.tsx";
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/" component={AuthPage} />
       <Route path="/profile-setup" component={ProfileSetupPage} />
       <Route path="/dashboard" component={DashboardPage} />
+      <Route path="/subject/:subjectId/quizzes" component={QuizSelectionPage} />
       <Route path="/lesson/:lessonId" component={LessonDetailPage} />
       <Route path="/quiz/:quizId" component={QuizPage} />
       <Route path="/profile" component={ProfilePage} />

@@ -177,6 +177,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(attempts);
   });
 
+  // Get quizzes for a subject
+  app.get("/api/subjects/:subjectId/quizzes", async (req, res) => {
+    const quizzes = await storage.getQuizzesBySubject(req.params.subjectId);
+    res.json(quizzes);
+  });
+
   // Dashboard data
   app.get("/api/user/:userId/dashboard", async (req, res) => {
     try {
