@@ -103,28 +103,35 @@ export default function ProfileSetupPage() {
 
                 <div>
                   <Label className="block text-sm font-medium mb-2">Preferred Language</Label>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Button
-                      type="button"
-                      variant={formData.language === "english" ? "default" : "outline"}
-                      className="p-3 h-auto flex flex-col"
-                      onClick={() => setFormData(prev => ({ ...prev, language: "english" }))}
-                      data-testid="button-language-english"
-                    >
-                      <Languages className="text-lg mb-1" />
-                      <div className="text-sm font-medium">English</div>
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={formData.language === "hindi" ? "default" : "outline"}
-                      className="p-3 h-auto flex flex-col"
-                      onClick={() => setFormData(prev => ({ ...prev, language: "hindi" }))}
-                      data-testid="button-language-hindi"
-                    >
-                      <Languages className="text-lg mb-1" />
-                      <div className="text-sm font-medium">हिंदी</div>
-                    </Button>
-                  </div>
+                  <Select value={formData.language} onValueChange={(value) => setFormData(prev => ({ ...prev, language: value }))}>
+                    <SelectTrigger data-testid="select-language">
+                      <SelectValue placeholder="Select your preferred language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="english">English</SelectItem>
+                      <SelectItem value="hindi">हिंदी (Hindi)</SelectItem>
+                      <SelectItem value="bengali">বাংলা (Bengali)</SelectItem>
+                      <SelectItem value="telugu">తెలుగు (Telugu)</SelectItem>
+                      <SelectItem value="marathi">मराठी (Marathi)</SelectItem>
+                      <SelectItem value="tamil">தமிழ் (Tamil)</SelectItem>
+                      <SelectItem value="gujarati">ગુજરાતી (Gujarati)</SelectItem>
+                      <SelectItem value="urdu">اردو (Urdu)</SelectItem>
+                      <SelectItem value="kannada">ಕನ್ನಡ (Kannada)</SelectItem>
+                      <SelectItem value="odia">ଓଡ଼ିଆ (Odia)</SelectItem>
+                      <SelectItem value="malayalam">മലയാളം (Malayalam)</SelectItem>
+                      <SelectItem value="punjabi">ਪੰਜਾਬੀ (Punjabi)</SelectItem>
+                      <SelectItem value="assamese">অসমীয়া (Assamese)</SelectItem>
+                      <SelectItem value="maithili">मैथिली (Maithili)</SelectItem>
+                      <SelectItem value="santali">ᱥᱟᱱᱛᱟᱲᱤ (Santali)</SelectItem>
+                      <SelectItem value="kashmiri">कॉशुर / کٲشُر (Kashmiri)</SelectItem>
+                      <SelectItem value="nepali">नेपाली (Nepali)</SelectItem>
+                      <SelectItem value="konkani">कोंकणी (Konkani)</SelectItem>
+                      <SelectItem value="sindhi">سنڌي / सिन्धी (Sindhi)</SelectItem>
+                      <SelectItem value="dogri">डोगरी (Dogri)</SelectItem>
+                      <SelectItem value="manipuri">মৈতৈলোন্ (Manipuri)</SelectItem>
+                      <SelectItem value="bodo">बर' (Bodo)</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <Button
