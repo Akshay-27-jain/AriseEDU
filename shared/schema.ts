@@ -21,6 +21,7 @@ export const subjects = pgTable("subjects", {
   icon: text("icon").notNull(),
   color: text("color").notNull(),
   description: text("description").notNull(),
+  classLevel: text("class_level").notNull(),
   totalLessons: integer("total_lessons").notNull().default(0),
 });
 

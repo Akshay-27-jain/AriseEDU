@@ -27,6 +27,7 @@ export interface IStorage {
 
   // Subject management
   getSubjects(): Promise<Subject[]>;
+  getSubjectsByClass(classLevel: string): Promise<Subject[]>;
   getSubject(id: string): Promise<Subject | undefined>;
 
   // Lesson management
@@ -70,124 +71,301 @@ export class MemStorage implements IStorage {
   }
 
   private seedData() {
-    // Seed subjects
-    const mathSubject: Subject = {
-      id: "math-1",
-      name: "Mathematics",
-      icon: "fas fa-calculator",
-      color: "blue-600",
-      description: "Learn numbers, calculations, and problem-solving",
-      totalLessons: 12,
-    };
+    this.seedSubjectsByClass();
+    this.seedLessons();
+    this.seedQuizzes();
+  }
 
-    const scienceSubject: Subject = {
-      id: "science-1",
-      name: "Science",
-      icon: "fas fa-flask",
-      color: "green-600",
-      description: "Explore the natural world and scientific concepts",
-      totalLessons: 8,
-    };
-
-    const languageSubject: Subject = {
-      id: "language-1",
-      name: "Language Arts",
-      icon: "fas fa-book",
-      color: "purple-600",
-      description: "Develop reading, writing, and communication skills",
-      totalLessons: 15,
-    };
-
-    const socialSubject: Subject = {
-      id: "social-1",
-      name: "Social Studies",
-      icon: "fas fa-globe-asia",
-      color: "orange-600",
-      description: "Learn about history, geography, and society",
-      totalLessons: 10,
-    };
-
-    this.subjects.set(mathSubject.id, mathSubject);
-    this.subjects.set(scienceSubject.id, scienceSubject);
-    this.subjects.set(languageSubject.id, languageSubject);
-    this.subjects.set(socialSubject.id, socialSubject);
-
-    // Seed lessons for Mathematics
-    const mathLessons: Lesson[] = [
+  private seedSubjectsByClass() {
+    // Class 1-2 Subjects
+    const earlyClassSubjects = [
       {
-        id: "lesson-math-1",
-        subjectId: "math-1",
-        title: "Introduction to Addition",
-        description: "Learn the basics of adding numbers together",
+        id: "math-class-1-2",
+        name: "Mathematics",
+        icon: "fas fa-calculator",
+        color: "blue-600",
+        description: "Numbers, counting, and basic addition/subtraction",
+        classLevel: "class-1,class-2",
+        totalLessons: 8,
+      },
+      {
+        id: "english-class-1-2",
+        name: "English",
+        icon: "fas fa-book",
+        color: "purple-600",
+        description: "Alphabet, basic words, and simple sentences",
+        classLevel: "class-1,class-2",
+        totalLessons: 10,
+      },
+      {
+        id: "evs-class-1-2",
+        name: "Environmental Studies",
+        icon: "fas fa-leaf",
+        color: "green-600",
+        description: "Family, animals, plants, and our surroundings",
+        classLevel: "class-1,class-2",
+        totalLessons: 6,
+      }
+    ];
+
+    // Class 3-5 Subjects
+    const middleClassSubjects = [
+      {
+        id: "math-class-3-5",
+        name: "Mathematics",
+        icon: "fas fa-calculator",
+        color: "blue-600",
+        description: "Multiplication, division, fractions, and geometry",
+        classLevel: "class-3,class-4,class-5",
+        totalLessons: 12,
+      },
+      {
+        id: "english-class-3-5",
+        name: "English",
+        icon: "fas fa-book",
+        color: "purple-600",
+        description: "Grammar, comprehension, and creative writing",
+        classLevel: "class-3,class-4,class-5",
+        totalLessons: 15,
+      },
+      {
+        id: "science-class-3-5",
+        name: "Science",
+        icon: "fas fa-flask",
+        color: "green-600",
+        description: "Basic physics, chemistry, and biology concepts",
+        classLevel: "class-3,class-4,class-5",
+        totalLessons: 10,
+      },
+      {
+        id: "social-class-3-5",
+        name: "Social Studies",
+        icon: "fas fa-globe-asia",
+        color: "orange-600",
+        description: "History, geography, and civics",
+        classLevel: "class-3,class-4,class-5",
+        totalLessons: 8,
+      }
+    ];
+
+    // Class 6-8 Subjects
+    const upperMiddleSubjects = [
+      {
+        id: "math-class-6-8",
+        name: "Mathematics",
+        icon: "fas fa-calculator",
+        color: "blue-600",
+        description: "Algebra, geometry, and advanced arithmetic",
+        classLevel: "class-6,class-7,class-8",
+        totalLessons: 16,
+      },
+      {
+        id: "english-class-6-8",
+        name: "English",
+        icon: "fas fa-book",
+        color: "purple-600",
+        description: "Literature, advanced grammar, and essay writing",
+        classLevel: "class-6,class-7,class-8",
+        totalLessons: 18,
+      },
+      {
+        id: "science-class-6-8",
+        name: "Science",
+        icon: "fas fa-flask",
+        color: "green-600",
+        description: "Physics, chemistry, and biology fundamentals",
+        classLevel: "class-6,class-7,class-8",
+        totalLessons: 20,
+      },
+      {
+        id: "social-class-6-8",
+        name: "Social Studies",
+        icon: "fas fa-globe-asia",
+        color: "orange-600",
+        description: "Indian history, world geography, and political science",
+        classLevel: "class-6,class-7,class-8",
+        totalLessons: 14,
+      },
+      {
+        id: "hindi-class-6-8",
+        name: "Hindi",
+        icon: "fas fa-language",
+        color: "red-600",
+        description: "Hindi literature, grammar, and composition",
+        classLevel: "class-6,class-7,class-8",
+        totalLessons: 12,
+      }
+    ];
+
+    // Class 9-10 Subjects
+    const highSchoolSubjects = [
+      {
+        id: "math-class-9-10",
+        name: "Mathematics",
+        icon: "fas fa-calculator",
+        color: "blue-600",
+        description: "Advanced algebra, geometry, and trigonometry",
+        classLevel: "class-9,class-10",
+        totalLessons: 20,
+      },
+      {
+        id: "english-class-9-10",
+        name: "English",
+        icon: "fas fa-book",
+        color: "purple-600",
+        description: "Advanced literature and language skills",
+        classLevel: "class-9,class-10",
+        totalLessons: 18,
+      },
+      {
+        id: "physics-class-9-10",
+        name: "Physics",
+        icon: "fas fa-atom",
+        color: "blue-500",
+        description: "Mechanics, light, sound, and electricity",
+        classLevel: "class-9,class-10",
+        totalLessons: 16,
+      },
+      {
+        id: "chemistry-class-9-10",
+        name: "Chemistry",
+        icon: "fas fa-vial",
+        color: "green-500",
+        description: "Atoms, molecules, acids, bases, and reactions",
+        classLevel: "class-9,class-10",
+        totalLessons: 16,
+      },
+      {
+        id: "biology-class-9-10",
+        name: "Biology",
+        icon: "fas fa-dna",
+        color: "green-700",
+        description: "Life processes, heredity, and natural resources",
+        classLevel: "class-9,class-10",
+        totalLessons: 14,
+      },
+      {
+        id: "social-class-9-10",
+        name: "Social Science",
+        icon: "fas fa-globe-asia",
+        color: "orange-600",
+        description: "History, geography, political science, and economics",
+        classLevel: "class-9,class-10",
+        totalLessons: 18,
+      },
+      {
+        id: "hindi-class-9-10",
+        name: "Hindi",
+        icon: "fas fa-language",
+        color: "red-600",
+        description: "Advanced Hindi literature and grammar",
+        classLevel: "class-9,class-10",
+        totalLessons: 14,
+      }
+    ];
+
+    // Store all subjects
+    [...earlyClassSubjects, ...middleClassSubjects, ...upperMiddleSubjects, ...highSchoolSubjects].forEach(subject => {
+      this.subjects.set(subject.id, subject);
+    });
+  }
+
+  private seedLessons() {
+    // Sample lessons for different subjects and classes
+    const lessons: Lesson[] = [
+      // Class 1-2 Math Lessons
+      {
+        id: "lesson-math-class-1-2-1",
+        subjectId: "math-class-1-2",
+        title: "Counting Numbers 1-10",
+        description: "Learn to count from 1 to 10",
         content: {
           type: "interactive",
           sections: [
             {
               type: "explanation",
-              title: "What is Addition?",
-              content: "Addition is one of the basic operations in mathematics that helps us combine quantities.",
-              image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400"
-            },
+              title: "What is Counting?",
+              content: "Counting helps us know how many things we have."
+            }
+          ]
+        },
+        order: 1,
+        points: 5,
+      },
+      // Class 3-5 Math Lessons
+      {
+        id: "lesson-math-class-3-5-1",
+        subjectId: "math-class-3-5",
+        title: "Introduction to Multiplication",
+        description: "Learn the basics of multiplication",
+        content: {
+          type: "interactive",
+          sections: [
             {
-              type: "interactive",
-              title: "Try it yourself:",
-              problem: "2 + 3 = ?",
-              answer: "5"
+              type: "explanation",
+              title: "What is Multiplication?",
+              content: "Multiplication is repeated addition. 3 × 4 means adding 3 four times."
             }
           ]
         },
         order: 1,
         points: 10,
       },
+      // Class 6-8 Science Lessons
       {
-        id: "lesson-math-2",
-        subjectId: "math-1",
-        title: "Basic Subtraction",
-        description: "Learn how to subtract numbers",
+        id: "lesson-science-class-6-8-1",
+        subjectId: "science-class-6-8",
+        title: "Introduction to Light",
+        description: "Understanding light and its properties",
         content: {
           type: "interactive",
           sections: [
             {
               type: "explanation",
-              title: "Understanding Subtraction",
-              content: "Subtraction is the opposite of addition. It helps us find the difference between numbers."
+              title: "What is Light?",
+              content: "Light is a form of energy that helps us see things around us."
             }
           ]
         },
-        order: 2,
-        points: 10,
+        order: 1,
+        points: 15,
       }
     ];
 
-    mathLessons.forEach(lesson => this.lessons.set(lesson.id, lesson));
+    lessons.forEach(lesson => this.lessons.set(lesson.id, lesson));
 
-    // Seed quizzes
-    const mathQuiz: Quiz = {
-      id: "quiz-math-1",
-      subjectId: "math-1",
-      lessonId: "lesson-math-1",
-      title: "Math Quiz - Addition",
-      questions: [
-        {
-          id: 1,
-          question: "What is 15 + 7?",
-          options: ["20", "22", "25", "28"],
-          correctAnswer: 1,
-          points: 10
-        },
-        {
-          id: 2,
-          question: "What is 9 + 6?",
-          options: ["14", "15", "16", "17"],
-          correctAnswer: 1,
-          points: 10
-        }
-      ],
-      timeLimit: 300,
-      points: 50,
-    };
+  }
 
-    this.quizzes.set(mathQuiz.id, mathQuiz);
+  private seedQuizzes() {
+    // Sample quizzes
+    const quizzes: Quiz[] = [
+      {
+        id: "quiz-math-class-3-5-1",
+        subjectId: "math-class-3-5",
+        lessonId: "lesson-math-class-3-5-1",
+        title: "Multiplication Quiz",
+        questions: [
+          {
+            id: 1,
+            question: "What is 3 × 4?",
+            options: ["10", "12", "14", "16"],
+            correctAnswer: 1,
+            points: 10
+          },
+          {
+            id: 2,
+            question: "What is 5 × 6?",
+            options: ["25", "30", "35", "40"],
+            correctAnswer: 1,
+            points: 10
+          }
+        ],
+        timeLimit: 300,
+        points: 50,
+      }
+    ];
+
+    quizzes.forEach(quiz => this.quizzes.set(quiz.id, quiz));
   }
 
   async getUser(id: string): Promise<User | undefined> {
@@ -261,6 +439,12 @@ export class MemStorage implements IStorage {
 
   async getSubjects(): Promise<Subject[]> {
     return Array.from(this.subjects.values());
+  }
+
+  async getSubjectsByClass(classLevel: string): Promise<Subject[]> {
+    return Array.from(this.subjects.values()).filter(subject => 
+      subject.classLevel.includes(classLevel)
+    );
   }
 
   async getSubject(id: string): Promise<Subject | undefined> {

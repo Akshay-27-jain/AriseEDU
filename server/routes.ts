@@ -185,7 +185,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "User not found" });
       }
 
-      const subjects = await storage.getSubjects();
+      const subjects = await storage.getSubjectsByClass(user.class);
       const userProgress = await storage.getUserProgress(req.params.userId);
       const quizAttempts = await storage.getUserQuizAttempts(req.params.userId);
 
