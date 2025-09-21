@@ -4,10 +4,12 @@ import { SubjectCard } from "@/components/subject-card";
 import { AchievementBadge } from "@/components/achievement-badge";
 import { BottomNavigation } from "@/components/bottom-navigation";
 import { Button } from "@/components/ui/button";
-import { Bell, Download } from "lucide-react";
+import { Bell, Download, Gamepad2, Sparkles } from "lucide-react";
+import { useLocation } from "wouter";
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const [, setLocation] = useLocation();
 
   const { data: dashboardData, isLoading } = useQuery({
     queryKey: ["/api/user", user?.id, "dashboard"],
@@ -123,38 +125,53 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Quick Actions */}
+        {/* Game Features */}
         <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
+          <h2 className="text-lg font-semibold mb-4">🎮 Game Features</h2>
 
           <div className="grid grid-cols-1 gap-3">
             <Button
-              variant="outline"
-              className="bg-card rounded-xl p-4 shadow-lg border border-border card-hover h-auto justify-start"
-              data-testid="button-take-quiz"
+              onClick={() => setLocation('/game')}
+              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl p-4 shadow-lg h-auto justify-start hover:from-purple-600 hover:to-pink-600"
             >
-              <div className="w-12 h-12 bg-secondary text-white rounded-xl flex items-center justify-center mr-4">
-                <i className="fas fa-question-circle text-xl"></i>
+              <div className="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mr-4">
+                <Gamepad2 className="text-xl" />
               </div>
               <div className="flex-1 text-left">
-                <h3 className="font-semibold">Take Quiz</h3>
-                <p className="text-sm text-muted-foreground">Test your knowledge</p>
+                <h3 className="font-semibold">Enter Game Hub</h3>
+                <p className="text-sm opacity-90">Village quests, skill trees, farming & more!</p>
               </div>
             </Button>
 
-            <Button
-              variant="outline"
-              className="bg-card rounded-xl p-4 shadow-lg border border-border card-hover h-auto justify-start"
-              data-testid="button-download-lessons"
-            >
-              <div className="w-12 h-12 bg-accent text-white rounded-xl flex items-center justify-center mr-4">
-                <Download className="text-xl" />
-              </div>
-              <div className="flex-1 text-left">
-                <h3 className="font-semibold">Download Lessons</h3>
-                <p className="text-sm text-muted-foreground">For offline learning</p>
-              </div>
-            </Button>
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                variant="outline"
+                className="bg-card rounded-xl p-4 shadow-lg border border-border card-hover h-auto justify-start"
+                data-testid="button-take-quiz"
+              >
+                <div className="w-12 h-12 bg-secondary text-white rounded-xl flex items-center justify-center mr-4">
+                  <i className="fas fa-question-circle text-xl"></i>
+                </div>
+                <div className="flex-1 text-left">
+                  <h3 className="font-semibold">Take Quiz</h3>
+                  <p className="text-sm text-muted-foreground">Test your knowledge</p>
+                </div>
+              </Button>
+
+              <Button
+                variant="outline"
+                className="bg-card rounded-xl p-4 shadow-lg border border-border card-hover h-auto justify-start"
+                data-testid="button-download-lessons"
+              >
+                <div className="w-12 h-12 bg-accent text-white rounded-xl flex items-center justify-center mr-4">
+                  <Download className="text-xl" />
+                </div>
+                <div className="flex-1 text-left">
+                  <h3 className="font-semibold">Download Lessons</h3>
+                  <p className="text-sm text-muted-foreground">For offline learning</p>
+                </div>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

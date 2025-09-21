@@ -1,9 +1,9 @@
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Home, BookOpen, ClipboardPenIcon, TrendingUp, User } from "lucide-react";
+import { Home, BookOpen, ClipboardPenIcon, TrendingUp, User, Gamepad2 } from "lucide-react";
 
 interface BottomNavigationProps {
-  currentPage: "home" | "lessons" | "quiz" | "progress" | "profile";
+  currentPage: "home" | "lessons" | "quiz" | "progress" | "profile" | "syllabus" | "game";
 }
 
 export function BottomNavigation({ currentPage }: BottomNavigationProps) {
@@ -17,28 +17,34 @@ export function BottomNavigation({ currentPage }: BottomNavigationProps) {
       path: "/dashboard" 
     },
     { 
-      id: "lessons", 
-      icon: BookOpen, 
-      label: "Lessons", 
-      path: "/dashboard" // TODO: Create lessons page
+      id: "progress", 
+      icon: TrendingUp, 
+      label: "Progress", 
+      path: "/progress"
     },
     { 
       id: "quiz", 
       icon: ClipboardPenIcon, 
       label: "Quiz", 
-      path: "/quiz/quiz-math-1" // TODO: Create quiz selection page
+      path: "/quiz-hub"
     },
     { 
-      id: "progress", 
-      icon: TrendingUp, 
-      label: "Progress", 
-      path: "/dashboard" // TODO: Create progress page
+      id: "syllabus", 
+      icon: BookOpen, 
+      label: "Syllabus", 
+      path: "/syllabus"
+    },
+    { 
+      id: "game", 
+      icon: Gamepad2, 
+      label: "Game", 
+      path: "/game"
     },
     { 
       id: "profile", 
       icon: User, 
       label: "Profile", 
-      path: "/profile" 
+      path: "/enhanced-profile" 
     },
   ];
 

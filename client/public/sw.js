@@ -1,4 +1,5 @@
-const CACHE_NAME = 'arise-learning-v1';
+const CACHE_NAME = 'arise-learning-v2';
+const GAME_CACHE_NAME = 'arise-games-v1';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
@@ -6,17 +7,33 @@ const STATIC_ASSETS = [
   '/src/index.css',
 ];
 
-// Install event - cache static assets
+// Game assets to cache for offline play
+const GAME_ASSETS = [
+  '/src/components/mini-games/',
+  '/src/components/village/',
+  '/src/components/skills/',
+  '/src/components/farming/',
+  '/src/components/festivals/',
+  '/src/components/community/',
+  '/src/components/ar/',
+  '/src/lib/game-engine.ts',
+];
+
+// Install event - cache static assets and game assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
+    Promise.all([
+      caches.open(CACHE_NAME).then((cache) => {
         console.log('Caching static assets');
         return cache.addAll(STATIC_ASSETS);
+      }),
+      caches.open(GAME_CACHE_NAME).then((cache) => {
+        console.log('Caching game assets for offline play');
+        return cache.addAll(GAME_ASSETS);
       })
-      .then(() => {
-        self.skipWaiting();
-      })
+    ]).then(() => {
+      self.skipWaiting();
+    })
   );
 });
 
